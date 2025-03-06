@@ -9,15 +9,16 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import CustomInput from "./CustomInput";
+import { login, signup } from "@/utils/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
   const [domLoaded, setDomLoaded] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter()
   useEffect(() => {
     setDomLoaded(true);
   }, []);
@@ -42,20 +43,37 @@ const AuthForm = ({ type }: { type: string }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      firstName: "mkdk",
+      lastName: "vfs",
       email: "",
-      password: "",
+      password: "12345678",
     },
   });
 
   // 2. Define a submit handler.
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      // Sign up with Appwrite & create plaid token
       if (type === "sign-up") {
+        const response = await signup(data)
+        if(response.success){
+          toast.success(response.message)
+          localStorage.setItem("pending_email", data.email); 
+        }else{
+          toast.error(response.message)
+        }
       }
       if (type === "sign-in") {
+        const response = await login(data)
+        if(response.success){
+          router.push('/')
+        }else{
+          if(response.message == "Email not confirmed"){
+            console.log("redirect")
+            router.push('/confirm-email')
+          }
+          toast.error(response.message)
+
+        }
       }
     } catch (error) {
       console.log(error);

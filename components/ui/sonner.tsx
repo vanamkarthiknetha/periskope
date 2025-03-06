@@ -11,10 +11,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
     theme={theme === "dark" ? "dark" : "light"}
-    position="top-center"
-    richColors
-    closeButton
-    duration={5000} // Adjust the timeout
     {...props}
     />
   )

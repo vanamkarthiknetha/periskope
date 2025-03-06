@@ -1,11 +1,12 @@
 import React from 'react'
 import Message from './Message';
 
-const ChatMessages = ({ user, chatId,messages }) => {
-    
+const ChatMessages = ({ loading,user, chatId, messages }) => {
+
     return (
         <div className='chat relative flex h-full w-full flex-1 flex-col !overflow-x-hidden '>
-            <div className="" style={{
+            {loading && <div className='text-center'>Loading..........</div>}
+            {!loading && <div className="" style={{
                 boxSizing: "border-box",
                 paddingTop: "0px",
                 paddingBottom: "0px",
@@ -16,12 +17,12 @@ const ChatMessages = ({ user, chatId,messages }) => {
                 {/* <Message type="other"/> */}
                 {/* <Message type="me"/> */}
                 {messages.map((message) => {
-                    if (!message) return null; 
+                    if (!message) return null;
                     return <Message key={message.id} message={message} type={message.senderId === user.id ? "me" : "other"} />
                 })}
-
-            </div>
-            <div><div className="h-6"></div></div>
+                
+            </div>}
+            <div  ><div className="h-6"></div></div>
         </div>
     )
 }

@@ -21,6 +21,14 @@ const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter()
   useEffect(() => {
     setDomLoaded(true);
+    toast("Log in with test@gmail.com/12345678 to explore or create your own account !",{
+          duration:15000,
+          closeButton:true,
+          style:{
+            fontSize:'15px'
+          },
+          position:"top-center"
+        })
   }, []);
   useEffect(() => {
     const handleComplete = () => setIsLoading(false);

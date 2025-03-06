@@ -8,12 +8,15 @@ import getAllMessages from '@/utils/actions/message.actions'
 const ChatElement = ({ chatId, user }) => {
   const [newMessage, setnewMessage] = useState('')
   const [messages, setMessages] = useState<any>([]);
+  const [loading, setLoading] = useState<any>(false);
 
   useEffect(() => {
     const getMessages = async () => {
+      setLoading(true)
       const data = await getAllMessages(chatId)
       if (data) setMessages(data)
         setnewMessage('')
+      setLoading(false)
     }
     getMessages()
 
@@ -43,7 +46,7 @@ const ChatElement = ({ chatId, user }) => {
   return (
     <div className='flex flex-1 h-[93vh] flex-col justify-center overflow-x-hidden'>
       <ChatHeader chatId={chatId} user={user} />
-      <ChatMessages user={user} chatId={chatId} messages={messages}/>
+      <ChatMessages loading={loading} user={user} chatId={chatId} messages={messages}/>
       <MessageBox chatId={chatId} user={user} setMessages={setMessages} newMessage={newMessage} setnewMessage={setnewMessage}/>
     </div>
   )

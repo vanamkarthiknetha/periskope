@@ -3,10 +3,14 @@ import React, { useEffect, useState } from 'react'
 
 const ChatHeader = ({ user, chatId }) => {
     const [data, setdata] = useState({ otherUser: { firstName: 'Loading..', email: '' } })
+      const [loading, setLoading] = useState<any>(false);
+    
     useEffect(() => {
         const fetch = async () => {
+            setLoading(true)
             const details = await getChatDetails(user.id, chatId)
             if (details) setdata(details)
+                setLoading(false)
         }
         fetch()
     }, [chatId, user.id])
@@ -19,7 +23,7 @@ const ChatHeader = ({ user, chatId }) => {
                         <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 20 20" aria-hidden="true" className="text-gray-50" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
                     </figure>
                 </div>
-                <div className="flex w-full flex-col gap-y-1 truncate "><span className="flex items-center gap-x-2 text-[15px] font-bold text-gray-900 lg:text-sm ">{data.otherUser.firstName}</span><div className="flex items-center gap-x-1 overflow-ellipsis text-xs leading-3 text-gray-400"><span className="max-lg:max-w-[80vw] max-lg:truncate">{data.otherUser.email}</span></div></div>
+                <div className="flex w-full flex-col gap-y-1 truncate "><span className="flex items-center gap-x-2 text-[15px] font-bold text-gray-900 lg:text-sm ">{loading?"Loading..":data.otherUser.firstName}</span><div className="flex items-center gap-x-1 overflow-ellipsis text-xs leading-3 text-gray-400"><span className="max-lg:max-w-[80vw] max-lg:truncate">{loading?"Loading...":data.otherUser.email}</span></div></div>
             </div>
             <div className="hidden gap-2 lg:flex">
                 <div className="flex items-center"><button className="bg-transparent border-transparent text-gray-800 hover:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed border py-1 px-2 text-xs rounded transition flex items-center justify-start min-w-max cursor-pointer "><div role="button" className="flex w-max text-xs"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 20 20" aria-hidden="true" className="h-4 w-4 shrink-0 " height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd"></path></svg></div><div className="group/popperel invisible relative z-50 rounded-md border bg-white p-2 text-xs font-medium text-gray-600 opacity-0 shadow-lg data-[show=true]:visible data-[show=true]:opacity-100 max-md:hidden" style={{

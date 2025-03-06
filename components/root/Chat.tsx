@@ -5,6 +5,7 @@ import ChatSidebar from "./ChatSidebar"
 import ChatsSection from "./ChatsSection"
 import { createClient } from "@/utils/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 const Chat = () => {
   const [user, setUser] = useState<any>(null)
@@ -15,6 +16,14 @@ const Chat = () => {
 
 
   useEffect(() => {
+    toast("Click on new chat button to add new chat !",{
+      duration:15000,
+      closeButton:true,
+      style:{
+        fontSize:'15px'
+      },
+      position:"top-center"
+    })
     const getUser = async () => {
       const { data } = await supabase.auth.getUser()
       if (!data.user) router.push('/sign-in')

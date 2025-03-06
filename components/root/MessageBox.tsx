@@ -1,4 +1,5 @@
 import React from 'react'
+import { Input } from '../ui/input'
 
 const MessageBox = () => {
     return (
@@ -50,7 +51,9 @@ const MessageBox = () => {
                                     whiteSpace: "pre-wrap",
                                     wordBreak: "break-word"
                                 }}
-                                ></div></div></div><div className="editor-placeholder flex w-full justify-start"><span>Message...</span></div>
+                                ></div></div></div><div className="editor-placeholder flex w-full justify-start">
+                                    <Input className='focus-visible:ring-0 border-none shadow-none' placeholder='Message...'/>
+                                </div>
                             </div>
                             <button className="bg-white border-white text-gray-800 hover:bg-gray-100 hover:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed border py-1.5 px-3 text-xs rounded transition flex items-center justify-center !bg-transparent" data-cy="send-chat-message" type="button"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" className="h-4 w-4 text-green-700" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m476.59 227.05-.16-.07L49.35 49.84A23.56 23.56 0 0 0 27.14 52 24.65 24.65 0 0 0 16 72.59v113.29a24 24 0 0 0 19.52 23.57l232.93 43.07a4 4 0 0 1 0 7.86L35.53 303.45A24 24 0 0 0 16 327v113.31A23.57 23.57 0 0 0 26.59 460a23.94 23.94 0 0 0 13.22 4 24.55 24.55 0 0 0 9.52-1.93L476.4 285.94l.19-.09a32 32 0 0 0 0-58.8z"></path></svg></button>
                         </div>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Message from './Message'
 
 const ChatMessages = () => {
     return (
@@ -10,7 +11,23 @@ const ChatMessages = () => {
                 marginTop: "0px"
             }}
 
-            ></div>
+            >
+                <Message type="other"/>
+                <Message type="other"/>
+                <Message type="me"/>
+                <Message type="other"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+                <Message type="me"/>
+            </div>
             <div><div className="h-6"></div></div>
         </div>
     )

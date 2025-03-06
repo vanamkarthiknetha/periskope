@@ -5,9 +5,9 @@ import MessageBox from './MessageBox'
 
 const ChatElement = () => {
   return (
-    <div className='flex flex-1 flex-col justify-center overflow-x-hidden'>
+    <div className='flex flex-1 h-[93vh] flex-col justify-center overflow-x-hidden'>
       <ChatHeader/>
-      <ChatMessages/>
+      <ChatMessages />
       <MessageBox/>
     </div>
   )

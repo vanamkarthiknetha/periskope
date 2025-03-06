@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+import React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
@@ -24,9 +25,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${IBMPlexSerif.variable} `}>
+      <body className={`${inter.variable} ${IBMPlexSerif.variable} flex flex-1 items-center justify-center overflow-hidden text-sm text-black h-screen `}>
         <Toaster />
         {children}
       </body>

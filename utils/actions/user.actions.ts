@@ -1,6 +1,5 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export async function login({
   email,
@@ -27,10 +26,10 @@ export async function signup({
   password: string;
 }) {
   const supabase = await createClient();
-  const exists = await checkUserExistsByEmail(supabase, email);
-  if (exists) {
-    return { success: false, message: "User already exists!" };
-  }
+  // const exists = await checkUserExistsByEmail(supabase, email);
+  // if (exists) {
+  //   return { success: false, message: "User already exists!" };
+  // }
   const response = await supabase.auth.signUp({ email, password });
 
   if (response.error) {
@@ -38,16 +37,6 @@ export async function signup({
   }
 
   return { success: true, message: "A new confirmation email has been sent!" };
-}
-
-export async function getUser() {
-  const supabase =  createClientComponentClient();
-
-  const response = await supabase.auth.getSession();
-  if (response.error) {
-    return { success: false, message: response.error.message };
-  }
-  return { success: true, message: "Logged in successfully!" };
 }
 
 const checkUserExistsByEmail = async (supabase, email: string) => {

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { redirect, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { toast } from "sonner";
 import CustomInput from "./CustomInput";
 import { login, signup } from "@/utils/actions/user.actions";
@@ -52,6 +52,7 @@ const AuthForm = ({ type }: { type: string }) => {
 
   // 2. Define a submit handler.
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsLoading(true)
     try {
       if (type === "sign-up") {
         const response = await signup(data)
@@ -61,6 +62,7 @@ const AuthForm = ({ type }: { type: string }) => {
         }else{
           toast.error(response.message)
         }
+
       }
       if (type === "sign-in") {
         const response = await login(data)
@@ -75,6 +77,8 @@ const AuthForm = ({ type }: { type: string }) => {
 
         }
       }
+      setIsLoading(false)
+
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,8 @@
-import { getUser } from "@/utils/actions/user.actions";
-
+import Chat from "@/components/root/Chat"
+import { createClient } from "@/utils/supabase/server";
+const supabase = await createClient()
+const { data:{user} } = await supabase.auth.getUser()
 export default async function Home() {
-  const user = await getUser()
-  return <div className=""> Home</div>;
+  
+  return <Chat user={user}/>
 }

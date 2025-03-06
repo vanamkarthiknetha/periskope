@@ -58,8 +58,7 @@ const AuthForm = ({ type }: { type: string }) => {
         const response = await signup(data)
         if(response.success){
           toast.success(response.message)
-          localStorage.setItem("pending_email", data.email); 
-          redirect('/confirm-email')
+          router.push('/')
         }else{
           toast.error(response.message)
         }
@@ -69,9 +68,6 @@ const AuthForm = ({ type }: { type: string }) => {
         if(response.success){
           router.push('/')
         }else{
-          if(response.message == "Email not confirmed"){
-            router.push('/confirm-email')
-          }
           toast.error(response.message)
 
         }

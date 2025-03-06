@@ -1,7 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from '../ui/input'
+import { sendMessage } from '@/utils/actions/message.actions'
+import { toast } from 'sonner'
 
-const MessageBox = () => {
+const MessageBox = ({chatId, user,setMessages,newMessage,setnewMessage}) => {
+    const handleOnChange= (e)=>{
+        setnewMessage(e.target.value)
+    }
+    const handleOnClick= async()=>{
+        if (!newMessage.trim()) return;
+        const {data,error} = await sendMessage(chatId, user.id, newMessage);
+        console.log(data)
+        if(error){
+            toast(error)
+        }
+        else {
+            setMessages((prev) => [...prev, data]); // Add sent message to UI instantly
+            setnewMessage("");
+        }
+    }
     return (
         <div translate="no">
             <div className="flex flex-col border-t">
@@ -52,10 +69,10 @@ const MessageBox = () => {
                                     wordBreak: "break-word"
                                 }}
                                 ></div></div></div><div className="editor-placeholder flex w-full justify-start">
-                                    <Input className='focus-visible:ring-0 border-none shadow-none' placeholder='Message...'/>
+                                    <Input value={newMessage} onChange={handleOnChange} className='focus-visible:ring-0 border-none shadow-none' placeholder='Message...'/>
                                 </div>
                             </div>
-                            <button className="bg-white border-white text-gray-800 hover:bg-gray-100 hover:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed border py-1.5 px-3 text-xs rounded transition flex items-center justify-center !bg-transparent" data-cy="send-chat-message" type="button"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" className="h-4 w-4 text-green-700" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m476.59 227.05-.16-.07L49.35 49.84A23.56 23.56 0 0 0 27.14 52 24.65 24.65 0 0 0 16 72.59v113.29a24 24 0 0 0 19.52 23.57l232.93 43.07a4 4 0 0 1 0 7.86L35.53 303.45A24 24 0 0 0 16 327v113.31A23.57 23.57 0 0 0 26.59 460a23.94 23.94 0 0 0 13.22 4 24.55 24.55 0 0 0 9.52-1.93L476.4 285.94l.19-.09a32 32 0 0 0 0-58.8z"></path></svg></button>
+                            <button onClick={handleOnClick} className="bg-white border-white text-gray-800 hover:bg-gray-100 hover:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed border py-1.5 px-3 text-xs rounded transition flex items-center justify-center !bg-transparent" data-cy="send-chat-message" type="button"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" className="h-4 w-4 text-green-700" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m476.59 227.05-.16-.07L49.35 49.84A23.56 23.56 0 0 0 27.14 52 24.65 24.65 0 0 0 16 72.59v113.29a24 24 0 0 0 19.52 23.57l232.93 43.07a4 4 0 0 1 0 7.86L35.53 303.45A24 24 0 0 0 16 327v113.31A23.57 23.57 0 0 0 26.59 460a23.94 23.94 0 0 0 13.22 4 24.55 24.55 0 0 0 9.52-1.93L476.4 285.94l.19-.09a32 32 0 0 0 0-58.8z"></path></svg></button>
                         </div>
                     </div>
                     <div className="flex w-full items-center justify-between py-1">
@@ -75,7 +92,7 @@ const MessageBox = () => {
                                 <figure className="flex h-6 w-6 items-center shrink-0 justify-center rounded-full border" style={{ backgroundColor: "rgb(209, 213, 219)" }}>
                                     <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 20 20" aria-hidden="true" className="text-gray-50" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
                                 </figure>
-                            </div><div className="max-w-[6rem] overflow-hidden text-ellipsis whitespace-nowrap text-xs" title="+91 90323 63511">Karthik Vanam</div></div><div className="flex items-center gap-x-1"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 16 16" className="h-3 w-3 shrink-0 text-gray-600" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708"></path></svg></div></article>
+                            </div><div className="max-w-[6rem] overflow-hidden text-ellipsis whitespace-nowrap text-xs" title="+91 90323 63511">{user.email}</div></div><div className="flex items-center gap-x-1"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 16 16" className="h-3 w-3 shrink-0 text-gray-600" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708"></path></svg></div></article>
                         </button>
                     </div>
                 </div>

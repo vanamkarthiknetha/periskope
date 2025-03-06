@@ -32,15 +32,36 @@ export async function signup({
     return { success: false, message: response.error.message };
   }
 
+  const { error } = await supabase
+  .from('users')
+  .insert({
+    userId:response.data.user!.id,
+    firstName,
+    lastName,
+    email,
+  })
+
   return { success: true, message: "Signed Up!" };
 }
 
-const checkUserExistsByEmail = async (supabase, email: string) => {
-  const { data } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", email)
-    .single();
+export async function getOtherUserInfo(user1: string, user2: string, currentUserId: string) {
+  const supabase =await createClient();
 
-  return data ? true : false;
-};
+  // Determine the other user's ID
+  const otherUserId = currentUserId === user1 ? user2 : user1;
+
+  // Fetch the other user's details
+  const { data: user, error } = await supabase
+      .from("users") // Replace with your actual users table name
+      .select("id, firstName, lastName, email") // Select the fields you need
+      .eq("userId", otherUserId)
+      .single();
+
+  if (error) {
+      console.error("Error fetching user:", error);
+      return null;
+  }
+
+  return user;
+}
+

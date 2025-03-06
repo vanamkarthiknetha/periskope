@@ -1,14 +1,37 @@
+"use client"
+import { useEffect, useState } from "react";
 import ChatElement from "./ChatElement"
 import ChatSidebar from "./ChatSidebar"
 import ChatsSection from "./ChatsSection"
+import { createClient } from "@/utils/supabase/client";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const Chat = async ({user}) => {
+const Chat = () => {
+  const [user, setUser] = useState<any>(null)
+  const searchParams = useSearchParams(); // Get query parameters
+  const chatId = searchParams.get("chatId");
+  const router = useRouter()
+  const supabase = createClient()
+
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser()
+      if (!data.user) router.push('/sign-in')
+      else setUser(data.user)
+    }
+    getUser()
+  },[router])
+  if (!user) return null; 
   return (
-  <div className="flex w-full flex-1 overflow-hidden">
-    <ChatsSection/>
-    <ChatElement/>
-    <ChatSidebar/>
-  </div>
+     <div className="flex w-full flex-1 overflow-hidden">
+      <ChatsSection user={user}/>
+      {chatId && <>
+        <ChatElement chatId={chatId} user={user}/>
+        <ChatSidebar />
+      </>}
+      {!chatId && <div className="flex">Open a chat to Message</div>}
+    </div>
   )
 }
 

@@ -1,7 +1,64 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ChatBox from './ChatBox'
+import { createChat, getAllChats } from "@/utils/actions/chat.actions";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Input } from '../ui/input';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
-const ChatsSection = () => {
+const ChatsSection = ({ user }) => {
+    const [chats, setchats] = useState<any>([])
+    const [newChatEmail, setnewChatEmail] = useState<any>('')
+    const router = useRouter()
+    const handleonChange = (e)=>{
+        setnewChatEmail(e.target.value)
+    }
+    useEffect(() => {
+        const getChats = async () => {
+            const data = await getAllChats(user.id)
+            if (data) setchats(data)
+        }
+        getChats()
+    }, [setchats, user.id])
+
+    const handleonClick = async () => {
+        toast("Please wait..")
+        const myUserId = user.id
+        const otherUserEmail = newChatEmail
+        if (!myUserId || !otherUserEmail) {
+            toast("Missing required data");
+            return;
+        }
+    
+        try {
+            const response = await createChat(myUserId, otherUserEmail);
+            if (response.error) {
+                toast(response.error)
+                console.log("Error:", response.error);
+            } else {
+                console.log("Chat created successfully:", response.chatId);
+                // Optionally, navigate to the chat
+                const updatedChats = await getAllChats(myUserId);
+                setchats(updatedChats);
+                router.push(`/?chatId=${response.chatId}`);
+            }
+        } catch (error) {
+            console.error("Unexpected error:", error);
+        }finally{
+            setnewChatEmail('')
+        }
+    };
+    
     return (<div className=''>
         <div className=' flex !h-12 flex-shrink-0 items-center justify-between border-b border-gray-200 px-2 py-2 max-lg:px-4 '>
             <div className='relative flex h-full w-full flex-shrink-0 flex-col border-r bg-gray-50 lg:w-48'>
@@ -35,38 +92,43 @@ const ChatsSection = () => {
                 }}
                 >
                     <div className="">
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        <ChatBox />
-                        
+                        {/* <ChatBox /> */}
+                        {chats.map((chat) => {
+                            return <ChatBox key={chat.id} chat={chat} user={user} />
+                        })}
+
                     </div>
                 </div>
             </div>
         </div>
         <div className="absolute bottom-4 left-[24vw] scale-125 lg:scale-100">
-                <div className="relative" data-headlessui-state=""><button id="headlessui-menu-button-:r6m:" type="button" aria-haspopup="menu" aria-expanded="false" data-headlessui-state="" fdprocessedid="l7rs5"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-700 text-2xl transition-all hover:scale-105"><svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-white " height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12.007 19.98a9.869 9.869 0 0 1 -4.307 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.992 1.7 2.93 4.04 2.747 6.34"></path><path d="M16 19h6"></path><path d="M19 16v6"></path></svg></div></button></div>
+            <div className="relative" data-headlessui-state="">
+                <AlertDialog>
+                    <AlertDialogTrigger><div id="headlessui-menu-button-:r6m:"  aria-haspopup="menu" aria-expanded="false" data-headlessui-state="" fdprocessedid="l7rs5">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-700 text-2xl transition-all hover:scale-105">
+                            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-white " height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12.007 19.98a9.869 9.869 0 0 1 -4.307 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.992 1.7 2.93 4.04 2.747 6.34"></path><path d="M16 19h6"></path><path d="M19 16v6"></path>
+                            </svg>
+                        </div>
+                    </div></AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Create Chat</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                <Input value={newChatEmail} onChange={handleonChange} placeholder='Enter receiver email..'/>
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleonClick}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
         </div>
+
+
+
+
     </div>
     )
 }

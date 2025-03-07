@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 .periskope-scrollbar{
   ::-webkit-scrollbar {
     width: 8px;
@@ -93,6 +95,10 @@
 @layer utilities {
   .input-class {
     @apply text-16 placeholder:text-16 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500;
+  }
+
+  .highlight{
+    @apply bg-gray-200/50
   }
 
   .sheet-content button {
